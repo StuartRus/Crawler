@@ -1,6 +1,6 @@
 {
 	"name": "kainetsoft/crawler",
-	"description": "",
+	"description": "A lightweight url crawler to generate link collections.",
 	"version": "1.0.0",
 	"type": "library",
 	"license": "GPL-3.0+",
