@@ -8,7 +8,11 @@ $crawler = new \Crawler\Crawler(
         'depth' => 5,
         'debug' => true
 	)
-);
+)->crawl();
 
-$links = $crawler->crawl()->getLinks();
+$links = $crawler->getLinks();
+$internalLinks = $crawler->getInternalLinks();
+$externalLinks = $crawler->getExternalLinks();
 var_dump($links);
+var_dump($internalLinks);
+var_dump($externalLinks);
