@@ -251,7 +251,8 @@ class Crawler {
      * @return string
      */
     protected function stripUrl($url) {
-        $url = strstr($url, '#', true);
+        $parsedUrl = parse_url($url);
+        $url = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . (isset($parsedUrl['path']) ? $parsedUrl['path'] : '');
         return substr($url, -1) == '/' ? substr($url, 0, -1) : $url;
     }
 
@@ -264,15 +265,17 @@ class Crawler {
      * @return void
      */
     protected function processUrl($url, $depth) {
-        $url = $this->stripUrl($url);
-        if (!$this->startsWith($url, 'http') &&
-            !$this->startsWith($url, 'javascript:') &&
-            !$this->startsWith($url, 'mailto:') &&
-            !$this->startsWith($url, 'tel:')) {
+        if ($this->startsWith($url, 'javascript:') ||
+            $this->startsWith($url, 'mailto:') ||
+            $this->startsWith($url, 'tel:')) {
+            return;
+        }
+        if (!$this->startsWith($url, 'http')) {
             $url = $this->scheme . '://' . $this->host .
                 (!$this->startsWith($url, '/') ? '/' : '') . $url;
         }
 
+        $url = $this->stripUrl($url);
         if (filter_var($url, FILTER_VALIDATE_URL)) {
             $parsedUrl = parse_url($url);
 
