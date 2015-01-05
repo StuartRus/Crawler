@@ -204,11 +204,17 @@ class Crawler {
      */
     protected function crawlPage($url, $depth) {
         if (isset($this->seenPages[$url]) || $depth === 0 || in_array($url, $this->ignoreLinks)) {
+            if($this->debug) {
+                printf('Already seen %s' . "\n", $url);
+            }
             return;
         }
 
         $this->setUrlSeen($url);
         if ($this->checkUrlExists && !$this->urlExists($url)) {
+            if($this->debug) {
+                printf('Not exists %s' . "\n", $url);
+            }
             return;
         }
 
@@ -294,7 +300,10 @@ class Crawler {
         $status = false;
 
         $handler = curl_init($url);    
-        curl_setopt($handler, CURLOPT_NOBODY, true);
+        curl_setopt_array($handler, array(
+            CURLOPT_NOBODY => true,
+            CURLOPT_FOLLOWLOCATION => true
+        ));
         curl_exec($handler);
         $code = curl_getinfo($handler, CURLINFO_HTTP_CODE);
 
