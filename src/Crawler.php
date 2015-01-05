@@ -244,13 +244,14 @@ class Crawler {
     }
 
     /**
-     * Strip last slash from url.
+     * Strip last slash and fragment from url.
      *
      * @param string $url
      *
      * @return string
      */
     protected function stripUrl($url) {
+        $url = strstr($url, '#', true);
         return substr($url, -1) == '/' ? substr($url, 0, -1) : $url;
     }
 
