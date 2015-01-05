@@ -266,7 +266,8 @@ class Crawler {
         $url = $this->stripUrl($url);
         if (!$this->startsWith($url, 'http') &&
             !$this->startsWith($url, 'javascript:') &&
-            !$this->startsWith($url, 'mailto:')) {
+            !$this->startsWith($url, 'mailto:') &&
+            !$this->startsWith($url, 'tel:')) {
             $url = $this->scheme . '://' . $this->host .
                 (!$this->startsWith($url, '/') ? '/' : '') . $url;
         }
