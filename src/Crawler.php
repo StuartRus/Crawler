@@ -180,7 +180,7 @@ class Crawler {
             'onlyInternal' => false,
             'onlyExternal' => false,
             'ignoreLinks' => array(),
-            'depth' => 5,
+            'depth' => 4,
             'gcCollector' => true,
             'debug' => false
         );
@@ -210,10 +210,11 @@ class Crawler {
      * @return void
      */
     protected function crawlPage($url, $depth) {
+        $url = $this->stripUrl($url);
         if ($this->debug) {
             printf('Crawl [%d] %s' . "\n", $depth, $url);
         }
-        if (isset($this->seenPages[$url]) || $depth === 0 || in_array($url, $this->ignoreLinks)) {
+        if ($this->isUrlSeen($url) || $depth === 0 || in_array($url, $this->ignoreLinks)) {
             if ($this->debug) {
                 printf('Already seen %s' . "\n", $url);
             }
@@ -243,6 +244,17 @@ class Crawler {
     }
 
     /**
+     * Strip last slash from url.
+     *
+     * @param string $url
+     *
+     * @return string
+     */
+    protected function stripUrl($url) {
+        return substr($url, -1) == '/' ? substr($url, 0, -1) : $url;
+    }
+
+    /**
      * Process url.
      *
      * @param string $url URL to process
@@ -251,6 +263,7 @@ class Crawler {
      * @return void
      */
     protected function processUrl($url, $depth) {
+        $url = $this->stripUrl($url);
         if (!$this->startsWith($url, 'http') && !$this->startsWith($url, 'javascript:')) {
             $url = $this->scheme . '://' . $this->host .
                 (!$this->startsWith($url, '/') ? '/' : '') . $url;
