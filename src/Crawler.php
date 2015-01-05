@@ -408,7 +408,7 @@ class Crawler {
 
         return array_key_exists(self::LINKS_INTERNAL, $this->foundLinks) ? 
             $this->foundLinks[self::LINKS_INTERNAL] : 
-            [];
+            array();
     }
 
     /**
@@ -425,7 +425,7 @@ class Crawler {
         
         return array_key_exists(self::LINKS_EXTERNAL, $this->foundLinks) ? 
             $this->foundLinks[self::LINKS_EXTERNAL] : 
-            [];
+            array();
     }
 
     /**
