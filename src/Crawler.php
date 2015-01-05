@@ -49,6 +49,13 @@ class Crawler {
     protected $seenUrls = array();
 
     /**
+     * Exist urls.
+     *
+     * @var array
+     */
+    protected $urlExists = array();
+
+    /**
      * Found links on urls.
      *
      * @var array
@@ -297,21 +304,29 @@ class Crawler {
      * @return boolean
      */
     protected function urlExists($url) {
-        $status = false;
-
-        $handler = curl_init($url);    
-        curl_setopt_array($handler, array(
-            CURLOPT_NOBODY => true,
-            CURLOPT_FOLLOWLOCATION => true
-        ));
-        curl_exec($handler);
-        $code = curl_getinfo($handler, CURLINFO_HTTP_CODE);
-
-        if ($code == 200) {
-            $status = true;
+        $hash = sha1($url);
+        if (isset($this->urlExists[$hash])) {
+            $status = $this->urlExists[$hash];
         }
-        
-        curl_close($handler);
+        else {
+            $status = false;
+
+            $handler = curl_init($url);
+            curl_setopt_array($handler, array(
+                CURLOPT_NOBODY => true,
+                CURLOPT_FOLLOWLOCATION => true
+            ));
+            curl_exec($handler);
+            $code = curl_getinfo($handler, CURLINFO_HTTP_CODE);
+
+            if ($code == 200) {
+                $status = true;
+            }
+
+            curl_close($handler);
+
+            $this->urlExists[$hash] = $status;
+        }
 
         return $status;
     }
@@ -364,6 +379,17 @@ class Crawler {
     }
 
     /**
+     * Clear link lists.
+     *
+     * @return void
+     */
+    protected function clearLists() {
+        $this->foundLinks = array();
+        $this->urlExists = array();
+        $this->seenUrls = array();
+    }
+
+    /**
      * Start crawler process.
      *
      * @return Crawler
@@ -373,6 +399,7 @@ class Crawler {
             gc_enable();
         }
 
+        $this->clearLists();
         $this->crawlPage($this->getUrl(), $this->getDepth());
 
         if ($this->gcCollector && gc_enabled()) {
