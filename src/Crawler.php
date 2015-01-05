@@ -210,8 +210,11 @@ class Crawler {
      * @return void
      */
     protected function crawlPage($url, $depth) {
+        if ($this->debug) {
+            printf('Crawl [%d] %s' . "\n", $depth, $url);
+        }
         if (isset($this->seenPages[$url]) || $depth === 0 || in_array($url, $this->ignoreLinks)) {
-            if($this->debug) {
+            if ($this->debug) {
                 printf('Already seen %s' . "\n", $url);
             }
             return;
@@ -219,7 +222,7 @@ class Crawler {
 
         $this->setUrlSeen($url);
         if ($this->checkUrlExists && !$this->urlExists($url)) {
-            if($this->debug) {
+            if ($this->debug) {
                 printf('Not exists %s' . "\n", $url);
             }
             return;
