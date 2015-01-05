@@ -264,7 +264,9 @@ class Crawler {
      */
     protected function processUrl($url, $depth) {
         $url = $this->stripUrl($url);
-        if (!$this->startsWith($url, 'http') && !$this->startsWith($url, 'javascript:')) {
+        if (!$this->startsWith($url, 'http') &&
+            !$this->startsWith($url, 'javascript:') &&
+            !$this->startsWith($url, 'mailto:')) {
             $url = $this->scheme . '://' . $this->host .
                 (!$this->startsWith($url, '/') ? '/' : '') . $url;
         }

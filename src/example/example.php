@@ -5,7 +5,7 @@ $crawler = new \Crawler\Crawler(
 	'http://example.com',
 	array(
         'checkUrlExists' => true,
-        'depth' => 5,
+        'depth' => 4,
         'debug' => true
 	)
 )->crawl();
