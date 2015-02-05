@@ -252,7 +252,9 @@ class Crawler {
      */
     protected function stripUrl($url) {
         $parsedUrl = parse_url($url);
-        $url = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . (isset($parsedUrl['path']) ? $parsedUrl['path'] : '');
+        $url = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . (isset($parsedUrl['path']) ? $parsedUrl['path'] : '') .
+            (isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '');
+
         return substr($url, -1) == '/' ? substr($url, 0, -1) : $url;
     }
 
